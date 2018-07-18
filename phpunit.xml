@@ -2,7 +2,7 @@
 
 <phpunit
         colors="true"
-        bootstrap="Tests/bootstrap.php"
+        bootstrap="tests/bootstrap.php"
         beStrictAboutTestsThatDoNotTestAnything="true"
         stopOnError="false"
         stopOnFailure="false"
