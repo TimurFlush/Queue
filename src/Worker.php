@@ -208,21 +208,18 @@ final class Worker implements EventsAwareInterface, InjectionAwareInterface
                     );
                 }
             }
-
         }
 
         if ($eventsManager->fire('jobWorker:beforeHandlingQueue', $firstJob, null, true) !== false) {
             while (true) {
-                while($this->paused) {
+                while ($this->paused) {
                     $this->sleep(1);
                 }
 
                 $job = $firstJob->getNextJob();
 
                 if ($this->isJob($job)) {
-
                     if ($eventsManager->fire('jobWorker:beforeHandlingJob', $job, null, true) !== false) {
-
                         if ($this->isSupportPcntlSignals()) {
                             $this->registerTimeoutHandler($job);
                         }
@@ -292,7 +289,7 @@ final class Worker implements EventsAwareInterface, InjectionAwareInterface
      */
     protected function resetTimeoutHandler()
     {
-        pcntl_signal(SIGALRM, function () {});
+        pcntl_signal(SIGALRM, SIG_IGN);
         pcntl_alarm(0);
     }
 
@@ -434,7 +431,6 @@ final class Worker implements EventsAwareInterface, InjectionAwareInterface
 
         switch (true) {
             case is_object($class):
-
                 if (!$this->isJob($class)) {
                     throw new Exception('The passed object is not the successor of the JobInterface interface.');
                 }
@@ -442,12 +438,12 @@ final class Worker implements EventsAwareInterface, InjectionAwareInterface
                 return $class;
                 break;
             case is_string($class):
-
                 if (!class_exists($class)) {
                     throw new Exception(
                         sprintf(
                             'The class name argument contains an unknown class: %s.',
-                            $class)
+                            $class
+                        )
                     );
                 }
 
