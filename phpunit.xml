@@ -17,8 +17,8 @@
     </php>
     <testsuites>
         <testsuite name="Queue Suite">
-            <directory>Tests</directory>
-            <exclude>Tests/Jobs</exclude>
+            <directory>tests</directory>
+            <exclude>tests/Jobs</exclude>
         </testsuite>
     </testsuites>
 
