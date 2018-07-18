@@ -80,7 +80,7 @@ abstract class Job implements JobInterface, InjectionAwareInterface, EventsAware
     /**
      * @var int
      */
-    protected $_autoPushEverySeconds = 0;
+    protected $_autoPushEverySeconds = null;
 
     /**
      * @var int
@@ -526,10 +526,16 @@ abstract class Job implements JobInterface, InjectionAwareInterface, EventsAware
      * @param bool $status
      * @param int $everySeconds
      * @return JobInterface
+     * @throws Exception
      */
     public function setAutoPush(bool $status, int $everySeconds = null): JobInterface
     {
         $this->_autoPush = $status;
+
+        if (is_int($everySeconds) && $everySeconds <= 0) {
+            throw new Exception('The number of seconds cannot be less than or equal to zero.');
+        }
+
         $this->_autoPushEverySeconds = $everySeconds;
 
         return $this;
