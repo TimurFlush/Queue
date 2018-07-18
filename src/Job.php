@@ -527,7 +527,7 @@ abstract class Job implements JobInterface, InjectionAwareInterface, EventsAware
      * @param int $everySeconds
      * @return JobInterface
      */
-    public function setAutoPush(bool $status, int $everySeconds): JobInterface
+    public function setAutoPush(bool $status, int $everySeconds = null): JobInterface
     {
         $this->_autoPush = $status;
         $this->_autoPushEverySeconds = $everySeconds;
