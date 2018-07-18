@@ -136,7 +136,9 @@ abstract class Job implements JobInterface, InjectionAwareInterface, EventsAware
         }
 
         if ($dependencyInjector === null) {
-            throw new Exception('A dependency injector container is required to obtain the services related to the Job.');
+            throw new Exception(
+                'A dependency injector container is required to obtain the services related to the Job.'
+            );
         }
 
         $this->_dependencyInjector = $dependencyInjector;
@@ -310,7 +312,7 @@ abstract class Job implements JobInterface, InjectionAwareInterface, EventsAware
         if ($this->fireEventCancel('beforeDelete') === false) {
             $this->_cancelOperation();
             return false;
-        } else if ($this->isDeleted()) {
+        } elseif ($this->isDeleted()) {
             $this->appendMessage(
                 new Message(
                     'The job has already been deleted.',
@@ -421,7 +423,8 @@ abstract class Job implements JobInterface, InjectionAwareInterface, EventsAware
     }
 
     /**
-     * Sleep method determines which properties of the current object must be serialized to process the queue in console mode.
+     * Sleep method determines which properties of the current object
+     * must be serialized to process the queue in console mode.
      *
      * @return array
      */
@@ -462,7 +465,9 @@ abstract class Job implements JobInterface, InjectionAwareInterface, EventsAware
          */
         $dependencyInjector = Di::getDefault();
         if (!($dependencyInjector instanceof \Phalcon\DiInterface)) {
-            throw new Exception('A dependency injector container is required to obtain the services related to the Job.');
+            throw new Exception(
+                'A dependency injector container is required to obtain the services related to the Job.'
+            );
         }
         $this->_dependencyInjector = $dependencyInjector;
 
@@ -526,6 +531,7 @@ abstract class Job implements JobInterface, InjectionAwareInterface, EventsAware
     {
         $this->_autoPush = $status;
         $this->_autoPushEverySeconds = $everySeconds;
+
         return $this;
     }
 
@@ -700,7 +706,7 @@ abstract class Job implements JobInterface, InjectionAwareInterface, EventsAware
         if ($this->fireEventCancel('beforeSend') === false) {
             $this->_cancelOperation();
             return false;
-        } else if ($this->isExists()) {
+        } elseif ($this->isExists()) {
             $this->appendMessage(
                 new Message(
                     'You can not send an existing (existed) task to the queue.',
@@ -844,7 +850,7 @@ abstract class Job implements JobInterface, InjectionAwareInterface, EventsAware
         if ($this->fireEventCancel('beforeRelease') === false || $this->isDeleted()) {
             $this->_cancelOperation();
             return false;
-        } else if ($this->isDeleted()) {
+        } elseif ($this->isDeleted()) {
             $this->appendMessage(
                 new Message(
                     'The job has already been deleted.',
@@ -981,7 +987,7 @@ abstract class Job implements JobInterface, InjectionAwareInterface, EventsAware
                 $this->_cancelOperation();
                 return false;
             }
-        } else if ($validation === false) {
+        } elseif ($validation === false) {
             return false;
         }
 
