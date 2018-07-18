@@ -61,3 +61,8 @@ install:
 script:
   - vendor/bin/phpcs --extensions=php
   - vendor/bin/phpunit
+
+addons:
+  apt:
+    packages:
+      - re2c
