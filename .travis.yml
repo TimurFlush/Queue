@@ -38,7 +38,6 @@ before_install:
   - export PHP_MINOR="$(`phpenv which php` -r 'echo phpversion();' | cut -d '.' -f 2)"
   - sudo ln -s /home/travis/.phpenv/versions/$(phpenv version-name)/bin/phpize /usr/bin/
   - sudo ln -s /home/travis/.phpenv/versions/$(phpenv version-name)/bin/php-config /usr/bin/
-  - phpenv config-rm xdebug.ini || true
   - if [ -n "$GH_TOKEN" ]; then composer config github-oauth.github.com ${GH_TOKEN}; fi;
   - composer self-update
   - travis_retry composer install --prefer-dist --no-interaction --ignore-platform-reqs
@@ -46,13 +45,12 @@ before_install:
   - ( bash tests/_ci/install_zephir_parser.sh )
   - ( bash tests/_ci/install_zephir.sh )
   - bash tests/_ci/install_prereqs_$PHP_MAJOR.sh
-  - phpenv config-rm xdebug.ini || echo "xdebug is not installed"
 
 install:
   - git clone -q --depth=1 https://github.com/phalcon/cphalcon.git -b ${PHALCON_VERSION}
   - '( cd cphalcon; zephir fullclean && zephir generate $ZEND_BACKEND )'
   - (cd cphalcon/ext; export CFLAGS="-g3 -O1 -std=gnu90 -Wall -DZEPHIR_RELEASE=1"; /usr/bin/phpize &> /dev/null && ./configure --silent --enable-phalcon &> /dev/null && make --silent -j2 &> /dev/null && make --silent install)
-  - phpenv config-rm cphalcon/tests/_ci/phalcon.ini
+  - phpenv config-add cphalcon/tests/_ci/phalcon.ini
 
 
 script:
