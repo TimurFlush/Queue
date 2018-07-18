@@ -1,11 +1,63 @@
 language: php
 
+dist: trusty
+sudo: required
+
 php:
   - 7.2
 
-before_script:
+git:
+  depth: 1
+
+cache:
+  apt: true
+  ccache: true
+  timeout: 691200
+  directories:
+    - .temp
+    - $HOME/.ccache
+    - $HOME/.composer/cache
+
+matrix:
+  include:
+    - php: 7.2
+      env: ZEND_BACKEND="--backend=ZendEngine3" PHALCON_VERSION="v3.4.0"
+    - php: 7.2
+      env: ZEND_BACKEND="--backend=ZendEngine3" PHALCON_VERSION="v3.4.1"
+    - php: 7.2
+      env: ZEND_BACKEND="--backend=ZendEngine3" PHALCON_VERSION="3.4.x"
+
+env:
+  global:
+    - ZEND_DONT_UNLOAD_MODULES=1
+    - CC="ccache gcc"
+    - PATH="$PATH:~/bin"
+    - DISPLAY=":99.0"
+    - APPLICATION_ENV=testing
+  matrix:
+    - PHALCON_VERSION="3.4.x"
+    - PHALCON_VERSION="v3.4.0"
+    - PHALCON_VERSION="v3.4.1"
+
+before_install:
+  - export PHP_MAJOR="$(echo $TRAVIS_PHP_VERSION | cut -d '.' -f 1,2)"
+  - sudo ln -s /home/travis/.phpenv/versions/$(phpenv version-name)/bin/phpize /usr/bin/
+  - sudo ln -s /home/travis/.phpenv/versions/$(phpenv version-name)/bin/php-config /usr/bin/
+  - phpenv config-rm xdebug.ini || true
+  - if [ -n "$GH_TOKEN" ]; then composer config github-oauth.github.com ${GH_TOKEN}; fi;
   - composer self-update
-  - composer install --prefer-source --no-interaction --dev
+  - travis_retry composer install --prefer-dist --no-interaction --ignore-platform-reqs
+  - travis_retry composer require --dev "phalcon/zephir:0.9.11" --ignore-platform-reqs
+  - ( bash tests/_ci/install_zephir.sh )
+  - bash tests/_ci/install_prereqs_$PHP_MAJOR.sh
+
+install:
+  - git clone -q --depth=1 https://github.com/phalcon/cphalcon.git -b ${PHALCON_VERSION}
+  - '( cd cphalcon; zephir fullclean && zephir generate $ZEND_BACKEND )'
+  - (cd cphalcon/ext; export CFLAGS="-g3 -O1 -std=gnu90 -Wall -DZEPHIR_RELEASE=1"; /usr/bin/phpize &> /dev/null && ./configure --silent --enable-phalcon &> /dev/null && make --silent -j2 &> /dev/null && make --silent install)
+  - phpenv config-add cphalcon/tests/_ci/phalcon.ini
+
 
 script:
-  - php vendor/bin/phpunit
+  - vendor/bin/phpcs --extensions=php
+  - vendor/bin/phpunit
