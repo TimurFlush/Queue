@@ -1,0 +1,30 @@
+{
+  "name": "timur-flush/queue",
+  "description": "Queue.",
+  "license": "BSD-3-Clause",
+  "minimum-stability": "stable",
+  "authors": [
+    {
+      "name": "flush02",
+      "email": "flush02@tutanota.com"
+    }
+  ],
+  "require": {
+    "php": "^7.2.0",
+    "ext-phalcon": "^3.4.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^7.2.0",
+    "mockery/mockery": "^1.0.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "TimurFlush\\Queue\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "TimurFlush\\Queue\\Tests\\": "Tests/"
+    }
+  }
+}
