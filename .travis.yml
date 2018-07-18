@@ -56,7 +56,10 @@ install:
 
 script:
   - vendor/bin/phpcs --extensions=php
-  - vendor/bin/phpunit
+  - vendor/bin/phpunit --coverage-clover=coverage.xml
+
+after_success:
+    - bash <(curl -s https://codecov.io/bash)
 
 addons:
   apt:
