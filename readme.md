@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/TimurFlush/Queue.svg?branch=master)](https://travis-ci.org/TimurFlush/Queue)
+
 # Queue
 Component provides a unified API across a variety of different queue services. 
 Queues allow you to defer the processing of a time consuming task, such as 
