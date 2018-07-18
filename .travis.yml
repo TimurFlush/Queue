@@ -6,6 +6,15 @@ dist: trusty
 php:
   - 7.2
 
+matrix:
+  include:
+    - php: 7.2
+      env: ZEND_BACKEND="--backend=ZendEngine3" PHALCON_VERSION="v3.4.0"
+    - php: 7.2
+      env: ZEND_BACKEND="--backend=ZendEngine3" PHALCON_VERSION="v3.4.1"
+    - php: 7.2
+      env: ZEND_BACKEND="--backend=ZendEngine3" PHALCON_VERSION="3.4.x"
+
 git:
   depth: 1
 
@@ -17,15 +26,6 @@ cache:
     - .temp
     - $HOME/.ccache
     - $HOME/.composer/cache
-
-matrix:
-  include:
-    - php: 7.2
-      env: ZEND_BACKEND="--backend=ZendEngine3" PHALCON_VERSION="v3.4.0"
-    - php: 7.2
-      env: ZEND_BACKEND="--backend=ZendEngine3" PHALCON_VERSION="v3.4.1"
-    - php: 7.2
-      env: ZEND_BACKEND="--backend=ZendEngine3" PHALCON_VERSION="3.4.x"
 
 env:
   global:
