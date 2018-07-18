@@ -46,6 +46,7 @@ before_install:
   - ( bash tests/_ci/install_zephir_parser.sh )
   - ( bash tests/_ci/install_zephir.sh )
   - bash tests/_ci/install_prereqs_$PHP_MAJOR.sh
+  - phpenv config-rm xdebug.ini || echo "xdebug is not installed"
 
 install:
   - git clone -q --depth=1 https://github.com/phalcon/cphalcon.git -b ${PHALCON_VERSION}
