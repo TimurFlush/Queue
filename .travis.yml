@@ -9,7 +9,7 @@ php:
 matrix:
   include:
     - php: 7.2
-      env: ZEND_BACKEND="--backend=ZendEngine3" PHALCON_VERSION="3.4.x"
+      env: ZEND_BACKEND="--backend=ZendEngine3" PHALCON_VERSION="3.4.x" ZEPHIR_VERSION="0.10.10" ZEPHIR_PARSER_VERSION="v1.1.0"
 
 git:
   depth: 1
@@ -35,13 +35,15 @@ env:
 
 before_install:
   - export PHP_MAJOR="$(echo $TRAVIS_PHP_VERSION | cut -d '.' -f 1,2)"
+  - export PHP_MINOR="$(`phpenv which php` -r 'echo phpversion();' | cut -d '.' -f 2)"
   - sudo ln -s /home/travis/.phpenv/versions/$(phpenv version-name)/bin/phpize /usr/bin/
   - sudo ln -s /home/travis/.phpenv/versions/$(phpenv version-name)/bin/php-config /usr/bin/
   - phpenv config-rm xdebug.ini || true
   - if [ -n "$GH_TOKEN" ]; then composer config github-oauth.github.com ${GH_TOKEN}; fi;
   - composer self-update
   - travis_retry composer install --prefer-dist --no-interaction --ignore-platform-reqs
-  - travis_retry composer require --dev "phalcon/zephir:0.10.10" --ignore-platform-reqs
+  - travis_retry composer require --dev "phalcon/zephir:${ZEPHIR_VERSION}" --ignore-platform-reqs
+  - ( bash tests/_ci/install_zephir_parser.sh )
   - ( bash tests/_ci/install_zephir.sh )
   - bash tests/_ci/install_prereqs_$PHP_MAJOR.sh
 
