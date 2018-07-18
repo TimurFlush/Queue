@@ -66,7 +66,9 @@ final class Worker implements EventsAwareInterface, InjectionAwareInterface
         }
 
         if ($dependencyInjector === null) {
-            throw new Exception('A dependency injector container is required to obtain the services related to the queue worker.');
+            throw new Exception(
+                'A dependency injector container is required to obtain the services related to the queue worker.'
+            );
         }
 
         $this->_dependencyInjector = $dependencyInjector;
@@ -400,7 +402,7 @@ final class Worker implements EventsAwareInterface, InjectionAwareInterface
     {
         if ($seconds == 0) {
             return;
-        } else if ($seconds >= 1) {
+        } elseif ($seconds >= 1) {
             sleep($seconds);
         } else {
             usleep($seconds * 1000000);
@@ -411,7 +413,9 @@ final class Worker implements EventsAwareInterface, InjectionAwareInterface
      * Check the class or the object $job belonging to JobInterface interface and returns an object.
      *
      * @param string|JobInterface $class String of class or object instance of JobInterface.
-     * @param null|string $connectionService The name of the connection service in the container if you want to specify a name other than queue.
+     * @param null|string $connectionService The name of the connection service in the container
+     * if you want to specify a name other than queue.
+     *
      * @return JobInterface
      * @throws Exception
      */
@@ -425,7 +429,7 @@ final class Worker implements EventsAwareInterface, InjectionAwareInterface
 
         if ($connectionService === null) {
             throw new Exception('No connection service found for the work of the worker.');
-        } else if (!$this->isConnectionService($connectionService)) {
+        } elseif (!$this->isConnectionService($connectionService)) {
             throw new Exception('Invalid connection service provided.');
         }
 

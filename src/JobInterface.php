@@ -10,7 +10,7 @@ interface JobInterface
      * @param int $attempts
      * @return JobInterface
      */
-    public function setMaxAttemptsToDelete(int $attempts ): JobInterface;
+    public function setMaxAttemptsToDelete(int $attempts): JobInterface;
 
     /**
      * Returns the maximum attempts to delete.

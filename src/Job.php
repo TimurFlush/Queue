@@ -903,8 +903,8 @@ abstract class Job implements JobInterface, InjectionAwareInterface, EventsAware
         }
 
         /**
-        * Send a notification to the events manager
-        */
+         * Send a notification to the events manager
+         */
         return $this->_eventsManager->fire('job:' . $eventName, $this);
     }
 

@@ -51,11 +51,10 @@ interface MessageInterface
      */
     public function __toString(): string;
 
-	/**
+    /**
      * Magic __set_state helps to recover messages from serialization
      *
      * @param array $message
      */
-	public static function __set_state(array $message): MessageInterface;
-
+    public static function __set_state(array $message): MessageInterface;
 }

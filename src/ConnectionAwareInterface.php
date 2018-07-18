@@ -6,7 +6,7 @@ interface ConnectionAwareInterface
 {
     /**
      * Sets the connection adapter.
-     *
+     *s
      * @param AdapterInterface $adapter
      * @return JobInterface
      */
