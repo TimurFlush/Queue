@@ -133,6 +133,4 @@ interface AdapterInterface
      * @return bool
      */
     public function watchQueue(string $name): bool;
-
-
 }
