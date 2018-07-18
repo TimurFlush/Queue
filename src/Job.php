@@ -129,7 +129,7 @@ abstract class Job implements JobInterface, InjectionAwareInterface, EventsAware
      * @param string $connectionService Name of connection service in dependency injector.
      * @throws Exception
      */
-    public final function __construct(DiInterface $dependencyInjector = null, string $connectionService = null)
+    final public function __construct(DiInterface $dependencyInjector = null, string $connectionService = null)
     {
         if ($dependencyInjector === null) {
             $dependencyInjector = Di::getDefault();
@@ -345,9 +345,9 @@ abstract class Job implements JobInterface, InjectionAwareInterface, EventsAware
      * @return int
      */
     public function getOperationMade(): int
-	{
-		return $this->_operationMade;
-	}
+    {
+        return $this->_operationMade;
+    }
 
     /**
      * Sets the Type of the last operation performed by the job.
@@ -357,7 +357,7 @@ abstract class Job implements JobInterface, InjectionAwareInterface, EventsAware
      * @return JobInterface
      * @throws Exception
      */
-	public function setOperationMade(int $operation): JobInterface
+    public function setOperationMade(int $operation): JobInterface
     {
         switch ($operation) {
             case self::OP_SEND:
@@ -436,7 +436,7 @@ abstract class Job implements JobInterface, InjectionAwareInterface, EventsAware
                     function (/**@var \ReflectionProperty $property */$property) {
                         if (!$property->isStatic()) {
                             $propertyName = $property->getName();
-                            if (!is_callable($this->{$propertyName}) AND !is_object($this->{$propertyName})) {
+                            if (!is_callable($this->{$propertyName}) && !is_object($this->{$propertyName})) {
                                 $property->setAccessible(true);
                                 return $property->getName();
                             }
@@ -480,8 +480,6 @@ abstract class Job implements JobInterface, InjectionAwareInterface, EventsAware
             throw new Exception('An events manager is required to obtain the services related to the Job.');
         }
         $this->_eventsManager = $eventsManager;
-
-
     }
 
     /**
@@ -716,7 +714,6 @@ abstract class Job implements JobInterface, InjectionAwareInterface, EventsAware
         }
 
         if ($this->_preSend() !== false) {
-
             $queueName = $this->getFullQueueName();
             $jobId = $this
                 ->getConnection()
@@ -897,11 +894,11 @@ abstract class Job implements JobInterface, InjectionAwareInterface, EventsAware
          */
         if (method_exists($this, $eventName)) {
             $this->{$eventName}();
-		}
+        }
 
         /**
-         * Send a notification to the events manager
-         */
+        * Send a notification to the events manager
+        */
         return $this->_eventsManager->fire('job:' . $eventName, $this);
     }
 
@@ -989,7 +986,7 @@ abstract class Job implements JobInterface, InjectionAwareInterface, EventsAware
         }
 
         if ($this->fireEventCancel('afterValidationOnSend') === false) {
-           return false;
+            return false;
         }
 
         if ($this->fireEventCancel('beforeSend') === false) {
