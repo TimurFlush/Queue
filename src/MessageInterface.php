@@ -50,7 +50,6 @@ interface MessageInterface
      * Sets the job object.
      *
      * @param JobInterface $job
-     * @return MessageInterface
      */
     public function setJob(JobInterface $job);
 
@@ -60,6 +59,20 @@ interface MessageInterface
      * @return JobInterface|null
      */
     public function getJob();
+
+    /**
+     * Sets the code.
+     *
+     * @param int $code
+     */
+    public function setCode(int $code);
+
+    /**
+     * Returns the code.
+     *
+     * @return int|null
+     */
+    public function getCode();
 
     /**
      * Magic __toString method returns verbose message
