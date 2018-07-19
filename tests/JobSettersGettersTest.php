@@ -11,7 +11,9 @@ use PHPUnit\Framework\TestCase;
 use TimurFlush\Queue\Adapter\Blackhole;
 use TimurFlush\Queue\AdapterInterface;
 use TimurFlush\Queue\Job;
+use TimurFlush\Queue\JobInterface;
 use TimurFlush\Queue\Message;
+use TimurFlush\Queue\MessageInterface;
 use TimurFlush\Queue\Tests\Jobs\TestJob;
 use Mockery as m;
 
@@ -66,17 +68,27 @@ class JobSettersGettersTest extends TestCase
     public function testGetTotalJobsInQueue()
     {
         $job = &$this->job;
-        $job->setConnection(new Blackhole());
-        $total = 0;
+
+        $total = rand(111, 999);
+
+        $connectionMock = m::mock(AdapterInterface::class);
+        $connectionMock->shouldReceive('getTotalJobsInQueue')->andReturn($total);
+
+        $job->setConnection($connectionMock);
         $this->assertEquals($total, $job->getTotalJobsInQueue(), 'getTotalJobsInQueue() is not working.');
     }
     
     public function testGetNextJob()
     {
         $job = &$this->job;
-        $job->setConnection(new Blackhole());
-        $nextJob = null;
-        $this->assertEquals($nextJob, $job->getNextJob(), 'getNextJob() is not working.');
+
+        $jobMock = m::mock(JobInterface::class);
+
+        $connectionMock = m::mock(AdapterInterface::class);
+        $connectionMock->shouldReceive('getNextJob')->andReturn($jobMock);
+
+        $job->setConnection($connectionMock);
+        $this->assertEquals($jobMock, $job->getNextJob(), 'getNextJob() is not working.');
     }
 
     public function testOperationMade()
@@ -109,18 +121,21 @@ class JobSettersGettersTest extends TestCase
     {
         $job = &$this->job;
 
-        $firstMessage = new Message('firstMessage');
-        $secondMessage = new Message('secondMessage');
+        $firstMessageMock = m::mock(MessageInterface::class);
+        $firstMessageMock->shouldReceive('getMessage')->andReturn('firstMessageMock');
 
-        $job->appendMessage($firstMessage);
-        $job->appendMessage($secondMessage);
+        $secondMessageMock = m::mock(MessageInterface::class);
+        $secondMessageMock->shouldReceive('getMessage')->andReturn('secondMessageMock');
+
+        $job->appendMessage($firstMessageMock);
+        $job->appendMessage($secondMessageMock);
 
         $messages = $job->getMessages();
         foreach ($messages as $message) {
             $text = $message->getMessage();
-            if ($text === 'firstMessage') {
+            if ($text === 'firstMessageMock') {
                 $this->assertEquals($text, $$text->getMessage(), 'appendMessage()/getMessages() is not working.');
-            } elseif ($text === 'secondMessage') {
+            } elseif ($text === 'secondMessageMock') {
                 $this->assertEquals($text, $$text->getMessage(), 'appendMessage()/getMessages() is not working.');
             }
         }
