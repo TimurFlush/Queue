@@ -976,12 +976,14 @@ abstract class Job implements JobInterface, InjectionAwareInterface, EventsAware
         }
 
         if (is_object($validation) && $validation instanceof ValidationInterface) {
+            $calledClass = get_called_class();
             $properties = (new \ReflectionObject($this))
                 ->getProperties();
 
             $data = [];
+
             foreach ($properties as $property) {
-                if (!$property->isDefault()) {
+                if ($property->class !== $calledClass) {
                     continue;
                 }
                 $property->setAccessible(true);
@@ -1040,12 +1042,13 @@ abstract class Job implements JobInterface, InjectionAwareInterface, EventsAware
      * @param $name
      * @param $value
      * @return mixed
+     * @throws Exception
      */
     public function __set($name, $value)
     {
         $jobName = get_class($this);
 
-        if (isset($this->{$name})) {
+        if (property_exists($this, $name)) {
             $setterName = 'set' . Text::camelize($name);
 
             if (method_exists($jobName, $setterName)) {
@@ -1054,19 +1057,20 @@ abstract class Job implements JobInterface, InjectionAwareInterface, EventsAware
             }
         }
 
-        trigger_error("Property '" . $name . "' does not have a setter.", E_USER_ERROR);
+        throw new Exception("Property '" . $name . "' does not have a setter.");
     }
 
     /**
      *
      * @param $name
      * @return mixed
+     * @throws Exception
      */
     public function __get($name)
     {
         $jobName = get_class($this);
 
-        if (isset($this->{$name})) {
+        if (property_exists($this, $name)) {
             $getterName = 'get' . Text::camelize($name);
 
             if (method_exists($jobName, $getterName)) {
@@ -1074,6 +1078,6 @@ abstract class Job implements JobInterface, InjectionAwareInterface, EventsAware
             }
         }
 
-        trigger_error("Access to undefined property " . $jobName . "::" . $name, E_USER_ERROR);
+        throw new Exception("Access to undefined property " . $jobName . "::" . $name);
     }
 }
