@@ -864,7 +864,7 @@ abstract class Job implements JobInterface, InjectionAwareInterface, EventsAware
     public function release(int $delay = null, int $priority = null): bool
     {
         $this->_operationMade = self::OP_RELEASE;
-        if ($this->fireEventCancel('beforeRelease') === false || $this->isDeleted()) {
+        if ($this->fireEventCancel('beforeRelease') === false) {
             $this->_cancelOperation();
             return false;
         } elseif ($this->isDeleted()) {
