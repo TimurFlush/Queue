@@ -326,7 +326,7 @@ abstract class Job implements JobInterface, InjectionAwareInterface, EventsAware
         } elseif ($this->getJobId() === null) {
             $this->appendMessage(
                 new Message(
-                    'The task does not exist, cannot be deleted.',
+                    'The job does not exist, cannot be deleted.',
                     null,
                     null,
                     $this
@@ -1027,8 +1027,8 @@ abstract class Job implements JobInterface, InjectionAwareInterface, EventsAware
     public function validationHasFailed(): bool
     {
         $messages = $this->_messages;
-        if (is_array($messages)) {
-            return count($messages) > 0;
+        if (is_array($messages) && count($messages) > 0) {
+            return true;
         }
 
         return false;
