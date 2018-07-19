@@ -323,6 +323,17 @@ abstract class Job implements JobInterface, InjectionAwareInterface, EventsAware
             );
             $this->_cancelOperation();
             return false;
+        } elseif ($this->getJobId() === null) {
+            $this->appendMessage(
+                new Message(
+                    'The task does not exist, cannot be deleted.',
+                    null,
+                    null,
+                    $this
+                )
+            );
+            $this->_cancelOperation();
+            return false;
         }
 
         $delete = $this
