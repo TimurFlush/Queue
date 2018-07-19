@@ -291,19 +291,4 @@ interface JobInterface
      * @return bool
      */
     public function isExists(): bool;
-
-    /**
-     *
-     * @param $name
-     * @param $value
-     * @return mixed
-     */
-    public function __set($name, $value);
-
-    /**
-     *
-     * @param $name
-     * @return mixed
-     */
-    public function __get($name);
 }
