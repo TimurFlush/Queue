@@ -164,7 +164,6 @@ class Beanstalk extends Adapter implements AdapterInterface
         if ($reserve === false) {
             return null;
         } else {
-
             $job = unserialize($reserve->getData());
             if ($job instanceof JobInterface) {
                 $job->setJobId($reserve->getId());

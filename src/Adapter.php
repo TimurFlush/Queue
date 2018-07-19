@@ -86,7 +86,7 @@ abstract class Adapter implements AdapterInterface
 
     final public function __destruct()
     {
-        register_shutdown_function(function() {
+        register_shutdown_function(function () {
             call_user_func([$this, 'disconnect']);
         });
     }
