@@ -3,13 +3,17 @@
 namespace TimurFlush\Queue\Tests;
 
 use Phalcon\Di;
+use Phalcon\DiInterface;
 use Phalcon\Events\Manager;
+use Phalcon\Events\ManagerInterface;
 use Phalcon\Queue\Beanstalk;
 use PHPUnit\Framework\TestCase;
 use TimurFlush\Queue\Adapter\Blackhole;
+use TimurFlush\Queue\AdapterInterface;
 use TimurFlush\Queue\Job;
 use TimurFlush\Queue\Message;
 use TimurFlush\Queue\Tests\Jobs\TestJob;
+use Mockery as m;
 
 class JobSettersGettersTest extends TestCase
 {
@@ -27,7 +31,7 @@ class JobSettersGettersTest extends TestCase
     
     public function testJobName()
     {
-        $job = $this->job;
+        $job = &$this->job;
         $jobName = 'someJob';
         $job->setJobName($jobName);
         $this->assertEquals($jobName, $job->getJobName(),
@@ -37,31 +41,31 @@ class JobSettersGettersTest extends TestCase
 
     public function testDI()
     {
-        $job = $this->job;
-        $di = new Di();
+        $job = &$this->job;
+        $di = m::mock(DiInterface::class);
         $job->setDI($di);
         $this->assertEquals($di, $job->getDI(), 'setDI()/getDI() is not working.');
     }
 
     public function testEventsManager()
     {
-        $job = $this->job;
-        $manager = new Manager();
+        $job = &$this->job;
+        $manager = m::mock(ManagerInterface::class);
         $job->setEventsManager($manager);
         $this->assertEquals($manager, $job->getEventsManager(), 'setEventsManager()/getEventsManager() is not working.');
     }
 
     public function testConnection()
     {
-        $job = $this->job;
-        $adapter = new Blackhole();
+        $job = &$this->job;
+        $adapter = m::mock(AdapterInterface::class);
         $job->setConnection($adapter);
         $this->assertEquals($adapter, $job->getConnection(), 'setConnection()/getConnection() is not working.');
     }
     
     public function testGetTotalJobsInQueue()
     {
-        $job = $this->job;
+        $job = &$this->job;
         $job->setConnection(new Blackhole());
         $total = 0;
         $this->assertEquals($total, $job->getTotalJobsInQueue(), 'getTotalJobsInQueue() is not working.');
@@ -69,7 +73,7 @@ class JobSettersGettersTest extends TestCase
     
     public function testGetNextJob()
     {
-        $job = $this->job;
+        $job = &$this->job;
         $job->setConnection(new Blackhole());
         $nextJob = null;
         $this->assertEquals($nextJob, $job->getNextJob(), 'getNextJob() is not working.');
@@ -77,7 +81,7 @@ class JobSettersGettersTest extends TestCase
 
     public function testOperationMade()
     {
-        $job = $this->job;
+        $job = &$this->job;
 
         $operation = Job::OP_SEND;
         $job->setOperationMade($operation);
@@ -94,7 +98,7 @@ class JobSettersGettersTest extends TestCase
 
     public function testAttemptDelay()
     {
-        $job = $this->job;
+        $job = &$this->job;
 
         $delay = rand(111, 999);
         $job->setAttemptDelay($delay);
@@ -103,7 +107,7 @@ class JobSettersGettersTest extends TestCase
 
     public function testGetMessages()
     {
-        $job = $this->job;
+        $job = &$this->job;
 
         $firstMessage = new Message('firstMessage');
         $secondMessage = new Message('secondMessage');
@@ -124,7 +128,7 @@ class JobSettersGettersTest extends TestCase
 
     public function testAutoPush()
     {
-        $job = $this->job;
+        $job = &$this->job;
 
         $ap = false;
         $job->setAutoPush(false);
@@ -137,7 +141,7 @@ class JobSettersGettersTest extends TestCase
 
     public function testPriority()
     {
-        $job = $this->job;
+        $job = &$this->job;
 
         $priority = rand(111, 999);
         $job->setPriority($priority);
@@ -146,7 +150,7 @@ class JobSettersGettersTest extends TestCase
 
     public function testDelay()
     {
-        $job = $this->job;
+        $job = &$this->job;
 
         $delay = rand(111, 999);
         $job->setDelay($delay);
@@ -155,7 +159,7 @@ class JobSettersGettersTest extends TestCase
 
     public function testTtr()
     {
-        $job = $this->job;
+        $job = &$this->job;
 
         $seconds = rand(111, 999);
         $job->setTtr($seconds);
@@ -164,7 +168,7 @@ class JobSettersGettersTest extends TestCase
 
     public function testQueuePrefix()
     {
-        $job = $this->job;
+        $job = &$this->job;
 
         $prefix = __METHOD__;
         $job->setQueuePrefix($prefix);
@@ -173,7 +177,7 @@ class JobSettersGettersTest extends TestCase
 
     public function testQueueName()
     {
-        $job = $this->job;
+        $job = &$this->job;
 
         $name = __METHOD__;
         $job->setQueueName($name);
@@ -182,7 +186,7 @@ class JobSettersGettersTest extends TestCase
 
     public function testGetFullQueueName()
     {
-        $job = $this->job;
+        $job = &$this->job;
 
         $prefix = 'PREFIX_' . __METHOD__;
         $job->setQueuePrefix($prefix);
@@ -196,7 +200,7 @@ class JobSettersGettersTest extends TestCase
 
     public function testGetAttempts()
     {
-        $job = $this->job;
+        $job = &$this->job;
 
         $this->assertEquals(0, $job->getAttempts(), 'getAttempts()/incrementAttempt() is not working.');
 
@@ -206,7 +210,7 @@ class JobSettersGettersTest extends TestCase
 
     public function testMaxAttemptsToDelete()
     {
-        $job = $this->job;
+        $job = &$this->job;
 
         $attempts = rand(111, 999);
         $job->setMaxAttemptsToDelete($attempts);
@@ -215,7 +219,7 @@ class JobSettersGettersTest extends TestCase
 
     public function testJobId()
     {
-        $job = $this->job;
+        $job = &$this->job;
 
         $id = rand(111, 999);
         $job->setJobId($id);

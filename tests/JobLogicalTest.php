@@ -3,8 +3,10 @@
 namespace TimurFlush\Queue\Tests;
 
 use PHPUnit\Framework\TestCase;
+use TimurFlush\Queue\AdapterInterface;
 use TimurFlush\Queue\Message;
 use TimurFlush\Queue\Tests\Jobs\TestJob;
+use Mockery as m;
 
 class JobLogicalTest extends TestCase
 {
@@ -22,7 +24,7 @@ class JobLogicalTest extends TestCase
 
     public function testIsExceededAttempts()
     {
-        $job = $this->job;
+        $job = &$this->job;
 
         $attempts = rand(111, 999);
         $attemptsToDelete = rand(111, 999);
@@ -37,12 +39,82 @@ class JobLogicalTest extends TestCase
 
     public function testValidationHasFailed()
     {
-        $job = $this->job;
+        $job = &$this->job;
 
         $this->assertFalse($job->validationHasFailed(), 'validationHasFailed() is not working.');
 
         $job->appendMessage(new Message('someText'));
         $this->assertTrue($job->validationHasFailed(), 'validationHasFailed() is not working.');
+    }
+
+    public function isExists()
+    {
+        $job = &$this->job;
+
+        $this->assertTrue(false, $this->isExists(), 'isExists() is not working.');
+
+        $job->setJobId(15);
+
+        $this->assertTrue(true, $this->isExists(), 'isExists() is not working.');
+    }
+
+    public function testSend()
+    {
+        $job = &$this->job;
+
+        $jobId = rand(111, 999);
+
+        $connectionMock = m::mock(AdapterInterface::class);
+        $connectionMock->shouldReceive('send')->andReturn($jobId);
+
+        $job->setConnection($connectionMock);
+
+        $send = $job->send();
+
+        $this->assertTrue($send, 'send() is not working.');
+        $this->assertEquals($jobId, $job->getJobId(), 'send() did not specify a job id.');
+        $this->assertEquals($job::OP_SEND, $job->getOperationMade(), 'send() did not specify operation made.');
+
+        if ($send) {
+            $this->assertFalse($job->send(), 'Resending is not possible.');
+        }
+    }
+
+    public function testRelease()
+    {
+        $job = &$this->job;
+
+        $connectionMock = m::mock(AdapterInterface::class);
+        $connectionMock->shouldReceive('send')->andReturn(rand(111, 999));
+        $connectionMock->shouldReceive('release')->andReturn(true);
+
+        $job->setConnection($connectionMock);
+
+        $job->send();
+
+        $this->assertTrue($job->release(), 'release() is not working.');
+        $this->assertEquals($job::OP_RELEASE, $job->getOperationMade(), 'release() did not specify operation made.');
+    }
+
+    public function testDelete()
+    {
+        $job = &$this->job;
+
+        $connectionMock = m::mock(AdapterInterface::class);
+        $connectionMock->shouldReceive('send')->andReturn(rand(111, 999));
+        $connectionMock->shouldReceive('delete')->andReturn(true);
+
+        $job->setConnection($connectionMock);
+
+        $job->send();
+        $delete = $job->delete();
+
+        $this->assertTrue($delete, 'delete() is not working.');
+        $this->assertEquals($job::OP_DELETE, $job->getOperationMade(), 'delete() did not specify operation made.');
+
+        if ($delete) {
+            $this->assertFalse($job->delete(), 'Another deletion is impossible.');
+        }
     }
 
     public function tearDown()/* The :void return type declaration that should be here would cause a BC issue */
