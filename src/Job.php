@@ -415,7 +415,7 @@ abstract class Job implements JobInterface, InjectionAwareInterface, EventsAware
      */
     public function setAttemptDelay($seconds): JobInterface
     {
-        if (!is_numeric($seconds)) {
+        if (!is_numeric($seconds) || $seconds <= 0) {
             throw new Exception('The seconds argument passed is not a number.');
         }
 
