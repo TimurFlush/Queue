@@ -984,6 +984,7 @@ abstract class Job implements JobInterface, InjectionAwareInterface, EventsAware
                 if (!$property->isDefault()) {
                     continue;
                 }
+                $property->setAccessible(true);
                 $data[$property->getName()] = $property->getValue($this);
             }
 
