@@ -381,7 +381,7 @@ abstract class Job implements JobInterface, InjectionAwareInterface, EventsAware
                 break;
             default:
                 throw new Exception(
-                    sprintf('Unknown operation: %d' . $operation)
+                    sprintf('Unknown operation: %d', $operation)
                 );
         }
     }
