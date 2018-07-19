@@ -47,6 +47,21 @@ interface MessageInterface
     public function getField();
 
     /**
+     * Sets the job object.
+     *
+     * @param JobInterface $job
+     * @return MessageInterface
+     */
+    public function setJob(JobInterface $job);
+
+    /**
+     * Returns the job object.
+     *
+     * @return JobInterface|null
+     */
+    public function getJob();
+
+    /**
      * Magic __toString method returns verbose message
      */
     public function __toString(): string;
