@@ -83,4 +83,11 @@ abstract class Adapter implements AdapterInterface
         $this->_queue = $name;
         return $this;
     }
+
+    final public function __destruct()
+    {
+        register_shutdown_function(function() {
+            call_user_func([$this, 'disconnect']);
+        });
+    }
 }

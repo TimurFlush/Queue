@@ -77,9 +77,9 @@ interface AdapterInterface
      * Sends the job $data to the queue $queueName.
      * If successful, returns the job ID.
      *
-     * @param string $data
-     * @param string $queue
-     * @param array $options
+     * @param string $data Data to serialize.
+     * @param string $queue Queue name.
+     * @param array $options Options.
      * @return bool|int
      */
     public function send($data, string $queue, array $options = []);

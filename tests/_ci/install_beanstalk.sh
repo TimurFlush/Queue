@@ -21,4 +21,4 @@ if [ ! -f "${TRAVIS_CONFIG}" ]; then
   exit 1;
 fi
 
-exit 1;
+echo -e "Beanstalk has been successfully installed."
