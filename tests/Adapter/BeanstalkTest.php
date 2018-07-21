@@ -5,6 +5,7 @@ namespace TimurFlush\Queue\Tests\Adapter;
 use Pheanstalk\Job;
 use PHPUnit\Framework\TestCase;
 use TimurFlush\Queue\Adapter\Beanstalk;
+use TimurFlush\Queue\AdapterInterface;
 use TimurFlush\Queue\Exception;
 use TimurFlush\Queue\Tests\Jobs\TestJob;
 
@@ -229,7 +230,54 @@ class BeanstalkTest extends TestCase
         return $method[1]  . $array[$method[1]];
     }
 
+    public function testSetPriority()
+    {
+        $beanstalk = &$this->beanstalk;
 
+        //variant 1
+        $this->assertInstanceOf(AdapterInterface::class, $beanstalk->setPriority(15), 'setPriority() is not working.');
+
+        //variant 2
+        $this->expectException(Exception::class);
+        $beanstalk->setPriority(-1);
+    }
+
+    public function testSetDelay()
+    {
+        $beanstalk = &$this->beanstalk;
+
+        //variant 1
+        $this->assertInstanceOf(AdapterInterface::class, $beanstalk->setDelay(15), 'setDelay() is not working.');
+
+        //variant 2
+        $this->expectException(Exception::class);
+        $beanstalk->setDelay(-1);
+    }
+
+    public function testSetTimeToRub()
+    {
+        $beanstalk = &$this->beanstalk;
+
+        //variant 1
+        $this->assertInstanceOf(AdapterInterface::class, $beanstalk->setTimeToRun(15), 'setTimeToRun() is not working.');
+
+        //variant 2
+        $this->expectException(Exception::class);
+        $beanstalk->setTimeToRun(-1);
+    }
+
+    public function testSetGetQueue()
+    {
+        $beanstalk = &$this->beanstalk;
+
+        //variant 1
+        $beanstalk->setQueue('someQueue');
+        $this->assertEquals('someQueue', $beanstalk->getQueue(), 'setQueue()/getQueue() is not working.');
+
+        //variant 2
+        $this->expectException(Exception::class);
+        $beanstalk->setQueue('');
+    }
 
     public function tearDown()/* The :void return type declaration that should be here would cause a BC issue */
     {

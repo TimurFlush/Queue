@@ -429,7 +429,7 @@ final class Worker implements EventsAwareInterface, InjectionAwareInterface
 
         if ($connectionService === null) {
             throw new Exception('No connection service found for the work of the worker.');
-        } elseif (!$this->isConnectionService($connectionService)) {
+        } elseif (!$this->isConnection($connectionService)) {
             throw new Exception('Invalid connection service provided.');
         }
 
@@ -472,7 +472,7 @@ final class Worker implements EventsAwareInterface, InjectionAwareInterface
      * @param $service
      * @return bool
      */
-    protected function isConnectionService($service): bool
+    protected function isConnection($service): bool
     {
         return $service instanceof AdapterInterface;
     }

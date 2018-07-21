@@ -7,7 +7,7 @@ use TimurFlush\Queue\JobInterface;
 use TimurFlush\Queue\Message;
 use Mockery as m;
 
-class MessageSettersGettersTest extends TestCase
+class MessageTest extends TestCase
 {
     /**
      * @var \TimurFlush\Queue\MessageInterface
@@ -84,6 +84,18 @@ class MessageSettersGettersTest extends TestCase
         $this->assertEquals('someType',  $message->getType(), '__construct () did not set the message type.');
         $this->assertEquals($jobMock, $message->getJob(), '__construct () did not set the job object.');
         $this->assertEquals(228, $message->getCode(), '__construct () did not set the code.');
+    }
+
+    public function testToString()
+    {
+        $this->assertEquals('someText', $this->message, '__toString() is not working.');
+    }
+
+    public function testSetState()
+    {
+        eval('$b = ' . var_export($this->message, true) . ';');
+
+        $this->assertEquals($b, $this->message, '__toString() is not working.');
     }
 
     public function tearDown()/* The :void return type declaration that should be here would cause a BC issue */
