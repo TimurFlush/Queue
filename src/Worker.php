@@ -263,6 +263,9 @@ final class Worker implements EventsAwareInterface, InjectionAwareInterface
                                         );
                                         continue;
                                     }
+                                } elseif ($autoPush !== false) {
+                                    $job->release($autoPush);
+                                    break;
                                 }
                             }
 
