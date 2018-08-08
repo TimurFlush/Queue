@@ -1,5 +1,5 @@
-[![Build Status](https://travis-ci.org/TimurFlush/Queue.svg?branch=master)](https://travis-ci.org/TimurFlush/Queue)
-[![Coverage Status](https://coveralls.io/repos/github/TimurFlush/Queue/badge.svg?branch=master)](https://coveralls.io/github/TimurFlush/Queue?branch=master)
+[![Build Status](https://travis-ci.org/TimurFlush/Queue.svg?branch=1.x-dev)](https://travis-ci.org/TimurFlush/Queue)
+[![Coverage Status](https://coveralls.io/repos/github/TimurFlush/Queue/badge.svg?branch=1.x-dev)](https://coveralls.io/github/TimurFlush/Queue?branch=1.x-dev)
 # Queue
 Component provides a unified API across a variety of different queue services. 
 Queues allow you to defer the processing of a time consuming task, such as 
