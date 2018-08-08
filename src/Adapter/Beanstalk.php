@@ -8,6 +8,7 @@ use TimurFlush\Queue\Adapter;
 use TimurFlush\Queue\AdapterInterface;
 use TimurFlush\Queue\Exception;
 use TimurFlush\Queue\JobInterface;
+use Pheanstalk\Exception\ServerException;
 
 class Beanstalk extends Adapter implements AdapterInterface
 {
