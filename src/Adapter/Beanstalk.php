@@ -209,7 +209,12 @@ class Beanstalk extends Adapter implements AdapterInterface
      */
     public function getTotalJobsInQueue(string $queue): int
     {
-        $stats = $this->statsTube($queue);
+        try {
+            $stats = $this->statsTube($queue);
+        } catch (ServerException $exception) {
+            $stats = new \stdClass();
+            $stats->total_jobs = 0;
+        }
         return (int)$stats->total_jobs;
     }
 
